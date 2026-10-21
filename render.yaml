@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: market-brief
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ACCESS_USER
+        value: research
+      - key: APP_ACCESS_PASSWORD
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://codeyu.shop/v1
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: gpt-6-astra
+      - key: LLM_REASONING_EFFORT
+        value: high
+      - key: FUYAO_API_KEY
+        sync: false
+      - key: IFIND_MCP_CONFIG_JSON
+        sync: false
