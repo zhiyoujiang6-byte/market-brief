@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f4">
+  <title>市场大势研判 | A股研究终端</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="同花顺首页"><img class="brand-logo" src="/ths-logo.png" alt="同花顺"></a>
+    <nav class="top-nav" aria-label="主导航"><a class="active" href="#market-view">行情</a><a href="#analysis-section">市场研判</a><a href="#evidence-section">数据证据</a></nav>
+    <div class="topbar-right">
+      <span class="status-chip" id="fuyao-status"><i></i>扶摇：检测中</span>
+      <span class="status-chip" id="ifind-status"><i></i>iFinD：检测中</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="title-row">
+      <div><div class="eyebrow">A-SHARE MARKET MONITOR <span class="eyebrow-dot"></span><span id="market-state">等待数据</span></div>
+        <h1>市场大势研判</h1>
+        <p class="subtitle">行情、资金与事件数据的结构化市场观察。</p>
+      </div>
+      <div class="asof"><span class="asof-label">数据更新时间</span><strong id="asof">尚未读取</strong><span id="trading-day" class="muted-small">交易日：未确认</span></div>
+    </section>
+
+    <section class="control-band" aria-label="行情查询设置">
+      <label>观察指数<select id="index-select"><option value="000300.SH">沪深300 · 000300.SH</option><option value="000001.SH">上证指数 · 000001.SH</option><option value="000905.SH">中证500 · 000905.SH</option><option value="000852.SH">中证1000 · 000852.SH</option><option value="399006.SZ">创业板指 · 399006.SZ</option><option value="000688.SH">科创50 · 000688.SH</option></select></label>
+      <label>历史区间<select id="days-select"><option value="20">近20日</option><option value="60" selected>近60日</option><option value="120">近120日</option><option value="250">近250日</option></select></label>
+      <label>股票代码<input id="ticker" inputmode="text" maxlength="9" placeholder="可选，如 600519.SH"></label>
+      <label>财报期<select id="report-select"><option value="">不读取财务指标</option><option value="2025-4">2025 年报</option><option value="2026-1">2026 一季报</option><option value="2026-2">2026 中报</option><option value="2026-3">2026 三季报</option><option value="2026-4">2026 年报</option></select></label>
+      <button id="refresh" class="secondary-button" type="button">刷新数据</button>
+    </section>
+
+    <div id="error" class="error-banner" role="alert" hidden></div>
+    <section class="index-strip" id="index-strip" aria-label="主要指数行情"></section>
+
+    <section class="market-layout" id="market-view">
+      <div class="main-column">
+        <section class="panel chart-panel">
+          <div class="panel-heading"><div><span class="section-kicker">01 · PRICE</span><h2 id="chart-title">指数历史行情</h2></div><span class="source-label" id="history-source">等待扶摇数据</span></div>
+          <div class="chart-wrap"><canvas id="price-chart" aria-label="指数历史行情图"></canvas><div id="chart-empty" class="chart-empty">等待行情数据</div></div>
+        </section>
+        <section class="panel breadth-panel">
+          <div class="panel-heading"><div><span class="section-kicker">02 · BREADTH</span><h2>A股市场宽度</h2></div><span class="source-label" id="breadth-coverage">未读取</span></div>
+          <div class="breadth-bar"><span id="advance-bar"></span><span id="decline-bar"></span><span id="flat-bar"></span></div>
+          <div id="breadth-metrics" class="metric-row"></div>
+          <p class="method-note">由扶摇全市场行情快照逐只计算；覆盖数、计算口径和上游时点随数据展示。</p>
+        </section>
+        <section class="analysis-section" id="analysis-section">
+          <div class="section-heading"><div><span class="section-kicker">03 · AI RESEARCH</span><h2>研判简报</h2></div><span id="model-badge" class="model-badge">GPT‑6 Astra · 高推理</span></div>
+          <div class="research-form"><label for="question">研究问题</label><div class="research-row"><input id="question" maxlength="300" value="当前市场的主要矛盾是什么？"><button id="analyze" class="primary-button" type="button">生成研判</button></div></div>
+          <div id="empty-state" class="empty-state"><strong>等待生成研判</strong><p>读取行情后即可查看市场状态、证据与变化条件。</p></div>
+          <div id="brief" hidden></div>
+        </section>
+        <section class="panel evidence-section" id="evidence-section">
+          <div class="panel-heading"><div><span class="section-kicker">事实数据</span><h2>证据与口径</h2></div><span id="evidence-count" class="source-label">0 项</span></div>
+          <div id="evidence-grid" class="evidence-grid"><p class="empty-inline">刷新扶摇数据后显示可引用证据。</p></div>
+        </section>
+      </div>
+
+      <aside class="side-column">
+        <section class="panel mood-panel">
+          <div class="panel-heading"><div><span class="section-kicker">05 · LIMITS & HEAT</span><h2>情绪与热度</h2></div><span id="special-date" class="source-label">未读取</span></div>
+          <div id="limit-metrics" class="limit-metrics"></div>
+          <div class="subheading"><h3>涨停池</h3><span id="limit-up-count">0</span></div><div id="limit-up-list" class="compact-list"></div>
+          <div class="subheading"><h3>跌停池</h3><span id="limit-down-count">0</span></div><div id="limit-down-list" class="compact-list"></div>
+          <div class="subheading"><h3>人气热榜</h3><span>日榜</span></div><div id="hot-list" class="compact-list"></div>
+        </section>
+        <section class="panel constituents-panel">
+          <div class="panel-heading"><div><span class="section-kicker">06 · MEMBERS</span><h2 id="constituent-title">指数成分</h2></div><span id="constituent-count" class="source-label">未读取</span></div>
+          <div class="table-scroll"><table><thead><tr><th>代码</th><th>名称</th><th>涨跌幅</th><th>PE-TTM</th></tr></thead><tbody id="constituent-rows"><tr><td colspan="4" class="empty-cell">等待数据</td></tr></tbody></table></div>
+          <p class="method-note">估值为当前快照；指数成分为当前成分，不代表历史成分。</p>
+        </section>
+        <section class="panel company-panel" id="company-panel" hidden>
+          <div class="panel-heading"><div><span class="section-kicker">INDIVIDUAL SECURITY</span><h2 id="company-heading">个股财务数据</h2></div><span id="company-report" class="source-label"></span></div>
+          <div id="company-status" class="method-note"></div><pre id="company-financials"></pre>
+        </section>
+        <section class="panel sector-panel">
+          <div class="panel-heading"><div><span class="section-kicker">07 · SECTORS</span><h2>指数与板块目录</h2></div></div>
+          <div class="sector-tools"><select id="catalog-type" aria-label="板块目录类型"><option value="industry">行业</option><option value="concept">概念</option><option value="region">地域</option><option value="thsIndex">同花顺指数</option></select><input id="sector-search" maxlength="40" placeholder="筛选名称或代码"></div>
+          <div id="sector-list" class="sector-list"><p class="empty-inline">目录读取后可按名称筛选。</p></div>
+        </section>
+      </aside>
+    </section>
+
+    <details class="ifind-section panel">
+      <summary class="panel-heading ifind-summary"><div><span class="section-kicker">扩展数据</span><h2>iFinD 数据查询</h2></div><span class="summary-side"><span id="ifind-tool-count" class="source-label">数据主题未加载</span><span class="chevron" aria-hidden="true">+</span></span></summary>
+      <div id="ifind-unconfigured" class="setup-callout" hidden></div>
+      <div class="ifind-controls">
+        <label>搜索数据主题<input id="tool-search" placeholder="市场宽度、资金、宏观、新闻"></label>
+        <label>数据主题<select id="tool-select"><option value="">等待数据源</option></select></label>
+      </div>
+      <div class="tool-description" id="tool-description">选择数据主题后查看可用指标。</div>
+      <div id="tool-argument-fields" class="argument-fields"></div>
+      <details class="raw-arguments"><summary>高级参数</summary><label class="sr-only" for="tool-arguments">JSON 查询参数</label><textarea id="tool-arguments" rows="3" spellcheck="false">{}</textarea></details>
+      <div class="ifind-actions"><button id="call-ifind" class="secondary-button" type="button" disabled>查询数据</button></div>
+      <div id="ifind-result" class="ifind-result" hidden></div>
+    </details>
+
+    <section class="followup-section">
+      <div><span class="section-kicker">09 · FOLLOW UP</span><h2>继续核验</h2></div>
+      <form id="followup-form"><label class="sr-only" for="followup">输入定向追问</label><input id="followup" maxlength="300" placeholder="例如：市场宽度覆盖不完整时，哪些结论需要降级？"><button id="followup-submit" type="submit" class="icon-button" title="提交追问" aria-label="提交追问">→</button></form>
+    </section>
+    <footer><span id="footer-meta">数据来源与更新时间见对应行情和证据。</span></footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
